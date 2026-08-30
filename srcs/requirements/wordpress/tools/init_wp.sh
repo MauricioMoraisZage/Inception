@@ -70,10 +70,18 @@ su -s /bin/sh www-data -c "HOME=/var/www WP_CLI_CACHE_DIR=$WP_CLI_CACHE_DIR \
 #	echo "[wordpress] User created: $WPN_USER"
 #fi
 
-if ! su -s /bin/sh www-data -c 'HOME=/var/www wp user get "$WPN_USER" --path=$WP_PATH' >/dev/null 2>&1; then
-    su -s /bin/sh www-data -c 'HOME=/var/www WP_CLI_CACHE_DIR=$WP_CLI_CACHE_DIR \
-        wp user create "$WPN_USER" "$WP_USER_MAIL" \
-            --user_pass="$WP_USER_PASS" --role=subscriber --path=$WP_PATH'
+if ! su -s /bin/sh www-data -c \
+    "HOME=/var/www WP_CLI_CACHE_DIR=\"$WP_CLI_CACHE_DIR\" \
+    wp user get \"$WPN_USER\" --path=\"$WP_PATH\"" \
+    >/dev/null 2>&1; then
+
+    su -s /bin/sh www-data -c \
+        "HOME=/var/www WP_CLI_CACHE_DIR=\"$WP_CLI_CACHE_DIR\" \
+        wp user create \"$WPN_USER\" \"$WP_USER_MAIL\" \
+        --user_pass=\"\$(cat /run/secrets/wp_user_password)\" \
+        --role=subscriber \
+        --path=\"$WP_PATH\""
+
     echo "[wordpress] User created: $WPN_USER"
 fi
 
