@@ -1,0 +1,15 @@
+# Environment configuration
+srcs/.env
+
+# Local secrets
+secrets/*.txt
+
+# Operating system / editor files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
